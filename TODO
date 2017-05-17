@@ -13,6 +13,9 @@ TODO:
 - adding and tracking dynamicArrays with monitor
 - specifying the subplot for a variable
 - make DynamicArray iterable
+- initialize a variable inside DynamicSystem
+- override __getitem__ for dynamicSystem to return variable by name or index
+
 
 THINKABOUT
 - instead of tick implement method update(timesteps). Update performs change dependent on the time that has passed
