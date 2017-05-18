@@ -12,3 +12,6 @@ TODO:
 THINKABOUT:
 plot all previous values but only display range of current ones => can navigate in history
 - How to dynamically delete data from logger
+- Is there a way to dynamically extend the number of elements in a dynamic array (as a reactance to some occuring event)
+- implement some sort of gradientVariable that calculates it's impact (direction of impact) regarding some other variable
+- Pass each variable the information frequency that determines, after how many iterations the value is updated (should be able to randomize this decision)
