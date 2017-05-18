@@ -3,38 +3,44 @@ from Connector import *
 
 class DynamicSystem():
 
-    def __init__(self,inputVariables=None,timedependentVariables=None,connections=None):
-        self.timedependentVariables=timedependentVariables
-        self.inputVariables=inputVariables
-        self.connections=connections
+    def __init__(self):
 
-    def __call__(self,inputs=None):
+        #NOTE: this approach works only with version >=3.6 because python needs to iterate over the keys in the order in which they have been added
+        self.inputVariables={}
+        self.connections={}
+        self.variables={}
 
-        if(not inputs is None):
-            for var,inp in zip(self.inputVariables,inputs):
-                var.assign(inp)
-        if(not self.timedependentVariables is None):
-            for var in self.timedependentVariables:
-                var.tick()
+    def add_variable(self,var,name):
+        assert(not name in self.variables.keys())
+        self.variables[name]=var
+        return var
 
-        if(not self.connections is None):
-            for connection in self.connections:
-                connection.tick()
+    def add_connection(self,connection,name):
+        assert(not name in self.connections.keys())
+        self.connections[name]=connection
+        return connection
+
+    def __getitem__(self,name):
+        return self.variables[name]
+
+    def tick(self, inputs=None):
+        for _,var in self.variables.items():
+            var.tick()
+
+        for _,conn in self.connections.items():
+            conn.tick()
 
 
 if __name__=='__main__':
 
-    subject=StaticConvergingVariable(10.,0.2)
-    reference=StaticConvergingVariable(5.,0.9)
-    reference.assign(100.)
-    expr_condition=lambda subj,ref: subj<0.5*ref
-    expr_update=lambda subj,ref: (ref-subj)*0.4
-    var_update=DynamicVariable(None)
 
-    connection=DynamicConnection(subject,reference,expr_condition,expr_update,var_update)
+    system=DynamicSystem()
+    system.add_variable(StaticConvergingVariable(10.,0.2),"subject")
+    system.add_variable(StaticConvergingVariable(5.,0.9),"reference")
 
-    system=DynamicSystem(inputVariables=[reference],timedependentVariables=[subject,reference],connections=[connection])
+    system.add_connection(DynamicConnection(system["subject"],system["reference"],lambda subj,ref: abs(subj-ref)>5,lambda subj,ref: (ref-subj)*0.4,updater=lambda x:x), "conn_subj_ref")
+    system["reference"](100)
 
     for i in range(100):
-        system()
-        print((subject.value,reference.value))
+        system.tick()
+        print(system["subject"].value,system["reference"].value)

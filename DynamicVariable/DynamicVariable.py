@@ -13,7 +13,7 @@ class DynamicVariable:
         return other+self.value
 
     def __iadd__(self, other):
-        self.assign(self.value + other)
+        self.__call__(self.value + other)
         return self
 
     def __sub__(self, other):
@@ -23,7 +23,7 @@ class DynamicVariable:
         return other-self.value
 
     def __isub__(self,other):
-        self.assign(self.value - other)
+        self.__call__(self.value - other)
         return self
 
     def __mul__(self,other):
@@ -33,7 +33,7 @@ class DynamicVariable:
         return other*self.value
 
     def __imul__(self, other):
-        self.assign(self.value * other)
+        self.__call__(self.value * other)
         return self
 
     def __truediv__(self, other):
@@ -43,7 +43,7 @@ class DynamicVariable:
         return int(other/self.value)
 
     def __itruediv__(self, other):
-        self.assign(int(self.value / other))
+        self.__call__(int(self.value / other))
         return self
 
     def __floordiv__(self,other):
@@ -53,7 +53,7 @@ class DynamicVariable:
         return float(other/self.value)
 
     def __ifloordiv__(self, other):
-        self.assign(float(self.value / other))
+        self.__call__(float(self.value / other))
         return self
 
     def __pow__(self, power, modulo=None):
@@ -63,7 +63,7 @@ class DynamicVariable:
         return pow(other,self.value)
 
     def __ipow__(self, other,modulo=None):
-        self.assign(pow(self.value, other, modulo))
+        self.__call__(pow(self.value, other, modulo))
         return self
 
     def __lshift__(self, other):
@@ -73,7 +73,7 @@ class DynamicVariable:
         return other<<self.value
 
     def __ilshift__(self, other):
-        self.assign(self.value << other)
+        self.__call__(self.value << other)
         return self
 
     def __rshift__(self, other):
@@ -83,7 +83,7 @@ class DynamicVariable:
         return other>>self.value
 
     def __irshift__(self, other):
-        self.assign(self.value >> other)
+        self.__call__(self.value >> other)
 
     def __and__(self, other):
         return self.value & other
@@ -92,7 +92,7 @@ class DynamicVariable:
         return other & self.value
 
     def __iand__(self, other):
-        self.assign(self.value & other)
+        self.__call__(self.value & other)
         return self
 
     def __xor__(self, other):
@@ -102,7 +102,7 @@ class DynamicVariable:
         return other ^ self.value
 
     def __ixor__(self, other):
-        self.assign(self.value ^ other)
+        self.__call__(self.value ^ other)
 
     def __or__(self, other):
         return self.value | other
@@ -111,7 +111,7 @@ class DynamicVariable:
         return other | self.value
 
     def __ior__(self, other):
-        self.assign(self.value | other)
+        self.__call__(self.value | other)
         return self
     ##end of arithmetic operations
 
@@ -163,10 +163,22 @@ class DynamicVariable:
 
 
     ##this method will be overloaded by each class inherting from DynamicVariable in order to deal with assignments of this variable
-    def assign(self, new_value):
-        self.value=new_value
+    def __call__(self, new_value=None):
+        if not new_value is None:
+            self.value=new_value
+
+        return self.value
+
+
+    #def __call__(self):
+        #return self.value
+
+    #gets called at every timestep, can be overriden in order to do timedependent calculation
+    def tick(self):
+        pass
 
 if __name__=='__main__':
     var=DynamicVariable(10)
+    #var(10)
     var+=2
     print(var+1)

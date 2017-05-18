@@ -14,12 +14,20 @@ class DynamicArray(DynamicVariable):
     def __setitem__(self, key, value):
         pass
 
+    def __len__(self):
+        return len(self.value)
+
+    def __iter__(self):
+        return self.value.__iter__()
+
     ##this method will be overloaded by each class inherting from DynamicVariable in order to deal with assignments of this variable
-    def assign(self, new_value):
-        self.value=new_value
+    def __call__(self, new_value=None):
+        if not new_value is None:
+            self.value=new_value
+        return self.value
 
 
 if __name__=='__main__':
     var=DynamicArray([1,2,3,4,5])
-    print(var[0])
-    var[0]=10
+    for el in var:
+        print(el)

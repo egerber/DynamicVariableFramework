@@ -43,8 +43,8 @@ if __name__=='__main__':
     logger.add_variable("dynamic",dyn)
 
     for i in range(1000):
-        exp.assign(np.random.rand()*100.)
-        dyn.assign(np.random.rand()*100)
+        exp.__call__(np.random.rand() * 100.)
+        dyn.__call__(np.random.rand() * 100)
         exp.tick()
         logger.tick()
 

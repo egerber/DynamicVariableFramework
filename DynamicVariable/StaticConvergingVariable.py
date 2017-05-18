@@ -7,8 +7,11 @@ class StaticConvergingVariable(TimeDependentVariable):
         self.value=value
         self.target_value=value
 
-    def assign(self,new_value):
-        self.target_value=new_value
+    def __call__(self, new_value=None):
+
+        if not new_value is None:
+            self.target_value=new_value
+        return self.value
 
     def tick(self):
         if abs(self.target_value-self.value)<self.stepsize_convergence:
@@ -20,7 +23,7 @@ class StaticConvergingVariable(TimeDependentVariable):
 
 if __name__=='__main__':
     var=StaticConvergingVariable(10,0.5)
-    var.assign(8.3)
+    var.__call__(8.3)
     for i in range(10):
         print("currentValue: ",str(var.value))
         var.tick()

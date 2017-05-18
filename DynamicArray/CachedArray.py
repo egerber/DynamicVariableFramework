@@ -15,8 +15,9 @@ class CachedArray(DynamicArray):
 
     #TODO decide if CachedArray should be a Timedependent Array and implement tick()
 
-    def assign(self,new_value_array):
-        self.history[self.currentPointer]=new_value_array
-        self.value=self.func(self.history[(self.currentPointer-self.ticks_delay)%(self.ticks_delay+1)])
-        self.currentPointer=(self.currentPointer+1)%(self.ticks_delay+1)
-
+    def __call__(self, new_value_array=None):
+        if(not new_value_array is None):
+            self.history[self.currentPointer]=new_value_array
+            self.value=self.func(self.history[(self.currentPointer-self.ticks_delay)%(self.ticks_delay+1)])
+            self.currentPointer=(self.currentPointer+1)%(self.ticks_delay+1)
+        return self.value

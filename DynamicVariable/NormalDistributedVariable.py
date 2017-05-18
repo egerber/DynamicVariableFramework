@@ -10,8 +10,11 @@ class NormalDistributedVariable(DynamicVariable):
         self.std=std
         self.value=np.random.normal(loc=mean,scale=std)
 
-    def assign(self, new_value):
-        self.value=new_value
+    def __call__(self, new_value=None):
+        if not new_value is None:
+            self.value=new_value
+        return self.value
+
 
     def tick(self):
         self.value=np.random.normal(loc=self.mean,scale=self.std)

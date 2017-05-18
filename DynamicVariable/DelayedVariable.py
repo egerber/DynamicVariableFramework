@@ -11,8 +11,9 @@ class DelayedVariable(TimeDependentVariable):
         self.value=value
         self.currentPointer=0
 
-    def assign(self, new_value):
-        self.history[self.currentPointer]=new_value
+    def __call__(self, new_value=None):
+        if not new_value is None:
+            self.history[self.currentPointer]=new_value
 
     def tick(self):
         self.currentPointer=(self.currentPointer+1)%(self.ticks_delay+1)

@@ -19,9 +19,10 @@ class DelayedArray(DynamicArray):
         self.history[self.currentPointer][key]=value
         #works only if ticks_delay>0
 
-    def assign(self,new_value_array):
-        self.history[self.currentPointer]=new_value_array
-
+    def __call__(self, new_value_array=None):
+        if not new_value_array is None:
+            self.history[self.currentPointer]=new_value_array
+        return self.value
 
 if __name__=='__main__':
     delayArray=DelayedArray([1,2,3,4,5,6,7],5)

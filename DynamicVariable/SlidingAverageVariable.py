@@ -10,10 +10,13 @@ class SlidingAverageVariable(DynamicVariable):
         self.history=np.array([value for i in range(count_timesteps)])
         self.currentPointer=0
 
-    def assign(self,new_value):
-        self.currentPointer=(self.currentPointer+1)%(self.count_timesteps)
-        self.history[self.currentPointer]=new_value
-        self.value=np.mean(self.history)
+    def __call__(self, new_value=None):
+
+        if not new_value is None:
+            self.currentPointer=(self.currentPointer+1)%(self.count_timesteps)
+            self.history[self.currentPointer]=new_value
+            self.value=np.mean(self.history)
+        return self.value
 
 
 
@@ -23,4 +26,4 @@ if __name__=='__main__':
 
     for i in range(20):
         print(var.value)
-        var.assign(i)
+        var.__call__(i)

@@ -16,18 +16,19 @@ class ExponentialConvergingVariable(TimeDependentVariable):
         self.target_value=value
         self.difference=difference
 
-    def assign(self,new_value):
-        self.target_value=new_value
+    def __call__(self, new_value=None):
+        if not new_value is None:
+            self.target_value=new_value
 
     def tick(self):
-        self.difference.assign(self.target_value-self.value)
+        self.difference.tick(self.target_value - self.value)
 
         self.value=self.value+self.difference.value*self.exponential_factor
 
 
 if __name__=='__main__':
     var=ExponentialConvergingVariable(10,0.2,DynamicVariable(0.))
-    var.assign(50)
+    var.__call__(50)
 
     for i in range(30):
         print("currentValue",str(var.value))

@@ -10,11 +10,14 @@ class UniformDistributedVariable(DynamicVariable):
         self.max=max
         self.value=np.random.uniform(low=min,high=max)
 
-    def assign(self, new_value):
-        self.value=new_value
+    def __call__(self, new_value=None):
+        if not new_value is None:
+            self.value=new_value
+        return self.value
 
     def tick(self):
         self.value=np.random.uniform(low=self.min,high=self.max)
+
 
 if __name__=='__main__':
     var=UniformDistributedVariable(0.,0.2)
